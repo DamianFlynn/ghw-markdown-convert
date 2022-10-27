@@ -1,0 +1,25 @@
+---
+name: 🔬 Validate Pull Request
+
+on:
+  workflow_call:
+    inputs:
+      repo-token:
+        required: true
+        type: string
+        description: "The GitHub token to use for the run"
+        
+jobs:
+  validate:
+    name: PR Requirements
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Check Release Label
+        id: release-label
+        uses: ./.github/actions/release-labels
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

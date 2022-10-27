@@ -1,0 +1,69 @@
+---
+name: "🧳 Build Main Definition"
+
+# Await for a call from a workflow. On receipt of a call, we need some secrets
+on:
+  workflow_call:
+    inputs:
+      repo-token:
+        required: true
+        type: string
+        description: "The GitHub token to use for the run"
+      OrderFile:
+        required: true
+        type: string
+      Title:
+        required: false
+        type: string
+        default: Azure Cloud Framework
+      Subtitle:
+        required: false
+        type: string
+        default: DESIGN DOCUMENT
+      MetadataFile:
+        required: false
+        type: string
+        default: templates/azure-document.yaml
+      Template:
+        required: false
+        type: string
+        default: templates/azure-document.tex
+      OutFile:
+        required: true
+        type: string
+
+jobs:
+
+  check-pr:
+    name: Check PR
+    uses: ./.github/workflows/validate-pull.yml
+    secrets: inherit
+    with:
+      repo-token: ${{ inputs.repo-token }}
+
+  build-pdf:
+    name: "🗓️ Refresh PDF"
+    if: ${{ github.event_name == 'pull_request' }} 
+    uses: ./.github/workflows/build-documentation.yml
+    secrets: inherit
+    with:
+      OrderFile: ${{ inputs.OrderFile }}
+      Title: ${{ inputs.Title }}
+      Subtitle: ${{ inputs.Subtitle }}
+      MetadataFile: ${{ inputs.MetadataFile }}
+      Template: ${{ inputs.Template }}
+      OutFile: ${{ inputs.OutFile }}
+
+  release-pdf:
+    name: "📦 Release PDF"
+    if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+    uses: ./.github/workflows/release-documentation.yml
+    secrets: inherit
+    with:
+      repo-token: ${{ inputs.repo-token }}
+      OrderFile: ${{ inputs.OrderFile }}
+      Title: ${{ inputs.Title }}
+      Subtitle: ${{ inputs.Subtitle }}
+      MetadataFile: ${{ inputs.MetadataFile }}
+      Template: ${{ inputs.Template }}
+      OutFile: ${{ inputs.OutFile }}
