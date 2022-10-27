@@ -1,5 +1,5 @@
 ---
-name: "🧳 Build Main Definition"
+name: "🧳 Documentation"
 
 # Await for a call from a workflow. On receipt of a call, we need some secrets
 on:
@@ -35,7 +35,7 @@ on:
 jobs:
 
   check-pr:
-    name: Check PR
+    name: 📋 Prerequisites
     uses: ./.github/workflows/validate-pull.yml
     secrets: inherit
     with:
@@ -56,14 +56,10 @@ jobs:
 
   release-pdf:
     name: "📦 Release PDF"
-    if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+    if: ${{ github.event_name == 'pull_request' }} 
+    #if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
     uses: ./.github/workflows/release-documentation.yml
     secrets: inherit
     with:
       repo-token: ${{ inputs.repo-token }}
-      OrderFile: ${{ inputs.OrderFile }}
-      Title: ${{ inputs.Title }}
-      Subtitle: ${{ inputs.Subtitle }}
-      MetadataFile: ${{ inputs.MetadataFile }}
-      Template: ${{ inputs.Template }}
-      OutFile: ${{ inputs.OutFile }}
+

@@ -5,39 +5,15 @@ on:
   workflow_call:
     # Map the workflow outputs to job outputs
     inputs:
-      OrderFile:
+      repo-token:
         required: true
         type: string
-      Title:
-        required: false
-        type: string
-        default: Azure Cloud Framework
-      Subtitle:
-        required: false
-        type: string
-        default: DESIGN DOCUMENT
-      MetadataFile:
-        required: false
-        type: string
-        default: templates/azure-document.yaml
-      Template:
-        required: false
-        type: string
-        default: templates/azure-document.tex
-      OutFile:
-        required: true
-        type: string
-    outputs:
-      firstword:
-        description: "The first output string"
-        value: ${{ jobs.example_job.outputs.output1 }}
-      secondword:
-        description: "The second output string"
-        value: ${{ jobs.example_job.outputs.output2 }}
+        description: "The GitHub token to use for the run"
+
 
 jobs:
   example_job:
-    name: Build Documentation
+    name: Release
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ github.token }}
