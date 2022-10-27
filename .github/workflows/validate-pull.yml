@@ -25,7 +25,7 @@ jobs:
         id: check_pr_label
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{ inputs.token }}
+          GITHUB_TOKEN: ${{ inputs.repo-token }}
         run: |
           LABELS=$(gh pr view $PR_URL --json labels  --jq '.labels[]| select((.name|contains("minor")) or (.name|contains("major")) or (.name|contains("patch")) or (.name|contains("no-release"))) |.name')
           NUMBER_OF_LABELS=$(echo "$LABELS" |wc -w)
@@ -46,7 +46,7 @@ jobs:
         if: steps.check_pr_label.outputs.release-type == ''
         uses: mshick/add-pr-comment@v1
         with:
-          repo-token: ${{ inputs.token }}
+          repo-token: ${{ inputs.repo-token }}
           repo-token-user-login: 'github-actions[bot]'
           message: |
             ${{ env.PRTYPE }}
@@ -63,7 +63,7 @@ jobs:
   
             You **must** apply an _single_ appropiate *'type/'* label, to proceed with the PR
   
-  
+
       - name: Block Job due to Label issue
         if: steps.check_pr_label.outputs.release-type == ''
         shell: bash
