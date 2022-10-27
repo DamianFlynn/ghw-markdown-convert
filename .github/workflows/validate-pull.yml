@@ -20,6 +20,6 @@ jobs:
 
       - name: Check Release Label
         id: release-label
-        uses: ./.github/actions/release-labels
+        uses: ../.github/actions/release-labels
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
