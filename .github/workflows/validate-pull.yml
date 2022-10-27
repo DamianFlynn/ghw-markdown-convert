@@ -25,7 +25,7 @@ jobs:
         id: check_pr_label
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{ inputs.repo-token }}
+          GH_TOKEN: ${{ inputs.repo-token }}
         run: |
           LABELS=$(gh pr view $PR_URL --json labels  --jq '.labels[]| select((.name|contains("minor")) or (.name|contains("major")) or (.name|contains("patch")) or (.name|contains("no-release"))) |.name')
           NUMBER_OF_LABELS=$(echo "$LABELS" |wc -w)
