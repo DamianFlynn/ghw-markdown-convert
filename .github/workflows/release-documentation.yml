@@ -44,6 +44,7 @@ jobs:
           echo "new ver - ${{ steps.semver.outputs.new-version }}"
           echo "new major ver - ${{ steps.semver.outputs.new-major-version }}"
           echo "new minor ver - ${{ steps.semver.outputs.new-minor-version }}"
+          
       # Add VERSION file to the repo
       - name: Store version numbers
         if: steps.semver.outcome == 'success'
@@ -54,6 +55,8 @@ jobs:
           echo '${{ steps.semver.outputs.new-major-version }}' > output/new-major-version.txt
           echo '${{ steps.semver.outputs.new-minor-version }}' > output/new-minor-version.txt
           echo '${{ steps.semver.outputs.new-version }}' > src/VERSION
+
+        
       # Add Change Log
       - name: Comment on PR Merge Example ${{ matrix.directory }}
         if: steps.initial-comment.outputs.comment-id == ''
